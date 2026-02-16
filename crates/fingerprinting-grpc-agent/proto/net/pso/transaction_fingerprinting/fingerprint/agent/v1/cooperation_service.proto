@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package net.outbe.fingerprint.agent.v1;
+package net.pso.transaction_fingerprinting.fingerprint.agent.v1;
 
 message CooperationRequest {
   // Secret generation

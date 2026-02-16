@@ -78,7 +78,7 @@ async fn main() -> Result<(), anyhow::Error> {
         .accept_http1(true)
         .add_service(
             ServiceBuilder::new(
-                net::outbe::fingerprint::agent::v1::CooperationServiceServer::new(service),
+                net::pso::transaction_fingerprinting::fingerprint::agent::v1::CooperationServiceServer::new(service),
             )
             .build(),
         )

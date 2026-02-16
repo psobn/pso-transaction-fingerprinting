@@ -1,7 +1,7 @@
 version: v2
 modules:
   - path: crates/fingerprinting-grpc/proto
-    name: buf.build/outbe/fingerprinting
+    name: buf.build/psobn/pso-transaction-fingerprinting
 
 lint:
   use:

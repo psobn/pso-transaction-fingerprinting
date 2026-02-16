@@ -1,4 +1,4 @@
-use crate::net::outbe::fingerprint::agent::v1::{CooperationRequest, CooperationServiceClient};
+use crate::net::pso::transaction_fingerprinting::fingerprint::agent::v1::{CooperationRequest, CooperationServiceClient};
 use anyhow::Error;
 use fingerprinting_core::AgentsTopology;
 use halo2_axiom::halo2curves::bn256::{Fr, G1Compressed, G1};
@@ -45,7 +45,7 @@ impl GrpcAgentsTopology {
     }
 
     fn get_client(addr: SocketAddr) -> CooperationServiceClient {
-        crate::net::outbe::fingerprint::agent::v1::CooperationServiceClientBuilder::new(format!(
+        crate::net::pso::transaction_fingerprinting::fingerprint::agent::v1::CooperationServiceClientBuilder::new(format!(
             "inter-agent-coop-service-{}",
             addr
         ))

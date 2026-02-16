@@ -3,7 +3,7 @@ mod generator {
     include!(concat!(env!("OUT_DIR"), "/proto_gen.rs"));
 }
 
-use crate::net::outbe::fingerprint::v1::{
+use crate::net::pso::transaction_fingerprinting::fingerprint::v1::{
     compute_batch_fingerprint_request::Item, ComputeBatchFingerprintRequest,
     ComputeBatchFingerprintResponse, ComputeSingleFingerprintRequest,
     ComputeSingleFingerprintResponse,
@@ -32,7 +32,7 @@ impl<P: FingerprintProtocol<Fr> + Sync> FingerprintService<P> {
 }
 
 impl<P: FingerprintProtocol<Fr> + Send + Sync + 'static>
-    net::outbe::fingerprint::v1::FingerprintService for FingerprintService<P>
+    net::pso::transaction_fingerprinting::fingerprint::v1::FingerprintService for FingerprintService<P>
 {
     async fn compute_single_fingerprint(
         &self,
@@ -140,7 +140,7 @@ mod dto_convert {
     use pilota::FastStr;
     use volo_grpc::{Code, Status};
 
-    impl TryInto<DateTime<Utc>> for net::outbe::common::v1::Timestamp {
+    impl TryInto<DateTime<Utc>> for net::pso::transaction_fingerprinting::common::v1::Timestamp {
         type Error = anyhow::Error;
 
         fn try_into(self) -> Result<DateTime<Utc>, Self::Error> {
@@ -149,7 +149,7 @@ mod dto_convert {
         }
     }
 
-    impl TryInto<Money> for net::outbe::common::v1::Money {
+    impl TryInto<Money> for net::pso::transaction_fingerprinting::common::v1::Money {
         type Error = anyhow::Error;
 
         fn try_into(self) -> Result<Money, Self::Error> {
@@ -167,7 +167,7 @@ mod dto_convert {
         }
     }
 
-    impl TryInto<RawTransaction> for net::outbe::fingerprint::v1::TransactionFingerprintData {
+    impl TryInto<RawTransaction> for net::pso::transaction_fingerprinting::fingerprint::v1::TransactionFingerprintData {
         type Error = Status;
 
         fn try_into(self) -> Result<RawTransaction, Self::Error> {
@@ -199,9 +199,9 @@ mod dto_convert {
         }
     }
 
-    impl From<Fr> for net::outbe::fingerprint::v1::Fingerprint {
+    impl From<Fr> for net::pso::transaction_fingerprinting::fingerprint::v1::Fingerprint {
         fn from(value: Fr) -> Self {
-            net::outbe::fingerprint::v1::Fingerprint {
+            net::pso::transaction_fingerprinting::fingerprint::v1::Fingerprint {
                 fingerprint: pilota::Bytes::copy_from_slice(value.to_bytes().as_slice()),
                 compact_fingerprint: FastStr::new(value.compact()),
                 _unknown_fields: Default::default(),
@@ -220,10 +220,10 @@ mod tests {
     use volo::FastStr;
 
     lazy_static! {
-        static ref CLIENT: net::outbe::fingerprint::v1::FingerprintServiceClient = {
+        static ref CLIENT: net::pso::transaction_fingerprinting::fingerprint::v1::FingerprintServiceClient = {
             let addr: SocketAddr = "[::1]:9000".parse().unwrap();
 
-            net::outbe::fingerprint::v1::FingerprintServiceClientBuilder::new(
+            net::pso::transaction_fingerprinting::fingerprint::v1::FingerprintServiceClientBuilder::new(
                 "fingerprinting-grpc-agent-client",
             )
             .address(addr)
@@ -234,15 +234,15 @@ mod tests {
     pub async fn test_fingerprint_computation() -> Result<(), anyhow::Error> {
         let tx_date = Utc::now();
 
-        let transaction_data = net::outbe::fingerprint::v1::TransactionFingerprintData {
+        let transaction_data = net::pso::transaction_fingerprinting::fingerprint::v1::TransactionFingerprintData {
             bic: FastStr::new("BCEELU21"),
-            amount: Some(net::outbe::common::v1::Money {
-                currency: net::outbe::common::v1::Currency::CURRENCY_EUR,
+            amount: Some(net::pso::transaction_fingerprinting::common::v1::Money {
+                currency: net::pso::transaction_fingerprinting::common::v1::Currency::CURRENCY_EUR,
                 units: 1000,
                 atto: 0,
                 _unknown_fields: Default::default(),
             }),
-            date_time: Some(net::outbe::common::v1::Timestamp {
+            date_time: Some(net::pso::transaction_fingerprinting::common::v1::Timestamp {
                 seconds: tx_date.timestamp() as u64,
                 nanos: tx_date.timestamp_subsec_nanos(),
                 _unknown_fields: Default::default(),

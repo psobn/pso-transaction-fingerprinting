@@ -79,7 +79,7 @@ async fn main() -> Result<(), anyhow::Error> {
             );
 
             let fingerprint_server = Server::new().add_service(
-                ServiceBuilder::new(fp::outbe::fingerprint::v1::FingerprintServiceServer::new(
+                ServiceBuilder::new(fp::pso::transaction_fingerprinting::fingerprint::v1::FingerprintServiceServer::new(
                     FingerprintService::new(protocol),
                 ))
                 .build(),
@@ -87,7 +87,7 @@ async fn main() -> Result<(), anyhow::Error> {
 
             let agent_server = Server::new().add_service(
                 ServiceBuilder::new(
-                    fp_agent::outbe::fingerprint::agent::v1::CooperationServiceServer::new(
+                    fp_agent::pso::transaction_fingerprinting::fingerprint::agent::v1::CooperationServiceServer::new(
                         cooperation_service,
                     ),
                 )
@@ -107,7 +107,7 @@ async fn main() -> Result<(), anyhow::Error> {
 
             (
                 Server::new().add_service(
-                    ServiceBuilder::new(fp::outbe::fingerprint::v1::FingerprintServiceServer::new(
+                    ServiceBuilder::new(fp::pso::transaction_fingerprinting::fingerprint::v1::FingerprintServiceServer::new(
                         FingerprintService::new(protocol),
                     ))
                     .build(),
