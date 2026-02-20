@@ -50,9 +50,9 @@ Each transaction fingerprint is generated from:
 
 ## Cryptographic Foundation
 
-### CRA Protocol Implementation
+### Spendinh Reflection Agent (SRA) Protocol Implementation
 
-The Collaborative Randomness Agreement (CRA) protocol ensures that transaction fingerprints can only be generated through cooperation between multiple agents, preventing any single entity from controlling the fingerprint generation process.
+The protocol ensures that transaction fingerprints can be generated only through cooperation among multiple agents, preventing any single entity from controlling the fingerprint generation process.
 
 **Key Protocol Properties:**
 - **Threshold Security**: Requires t-out-of-n agents to cooperate (e.g., 3-of-5)
@@ -70,9 +70,9 @@ The Collaborative Randomness Agreement (CRA) protocol ensures that transaction f
 - **Lagrange Interpolation**: Secret reconstruction from shares with proper coefficients
 - **BN256 Curve**: Elliptic curve for cryptographic operations (replaces original Ristretto curve)
 
-### Implementation Differences from Original CRA Specification
+### Implementation Differences from Original SRA Specification
 
-This implementation makes several key modifications to the original CRA Transaction Processing specification:
+This implementation makes several key modifications to the original SRA Transaction Processing specification:
 
 #### Curve Replacement
 - **Original**: Ristretto255 curve
@@ -97,9 +97,9 @@ This implementation makes several key modifications to the original CRA Transact
 - **Parallel Processing**: Concurrent agent communication for improved performance
 - **Comprehensive Testing**: Extensive test suite including collision resistance tests
 
-### CRA Protocol Workflow
+### SRA Protocol Workflow
 
-The CRA protocol follows a specific sequence to ensure secure, collaborative fingerprint generation:
+The SRA protocol follows a specific sequence to ensure secure, collaborative fingerprint generation:
 
 #### Phase 1: Data Preparation
 1. **Transaction Serialization**: Components (BIC, amount, currency, datetime) are serialized with a fixed 8-byte prefix
@@ -216,7 +216,7 @@ Shares:
 ### Development Mode (Single Agent)
 
 ```bash
-./target/release/fingerprinting-agent --config examples/cra-fingerprint-config/agent-naive.conf
+./target/release/fingerprinting-agent --config examples/sra-fingerprint-config/agent-naive.conf
 ```
 
 ### Production Mode (Multi-Agent)
@@ -231,7 +231,7 @@ Shares:
 
 2. **Start Main Agent** (agent 1):
 ```bash
-./target/release/fingerprinting-agent --config examples/cra-fingerprint-config/agent-1.conf
+./target/release/fingerprinting-agent --config examples/sra-fingerprint-config/agent-1.conf
 ```
 
 ## Use Cases and Applications
@@ -282,13 +282,13 @@ message TransactionFingerprintData {
 ## Mathematical Foundations
 
 ### Secret Sharing Mathematics
-The CRA protocol is built on Shamir's Secret Sharing scheme:
+The SRA protocol is built on Shamir's Secret Sharing scheme:
 
 **Polynomial Construction:**
 ```
 P(x) = k + a₁x + a₂x² + ... + aₜ₋₁x^(t-1)
 ```
-Where `k` is the secret, `t` is the threshold, and coefficients are random.
+Where `k` is the secret, `t` is the threshold, and the coefficients are random.
 
 **Share Generation:**
 ```
@@ -309,9 +309,9 @@ k = ∑(i∈S) λᵢ * sᵢ
 
 ## Security Considerations
 
-### CRA Protocol Security
+### SRA Protocol Security
 
-The CRA protocol provides several security guarantees:
+The SRA protocol provides several security guarantees:
 
 **Threshold Security:**
 - Requires cooperation of at least `t` agents to generate fingerprints
